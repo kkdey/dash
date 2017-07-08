@@ -1,0 +1,13 @@
+Package: dash
+Type: Package
+Title: Dirichlet Adaptive Shrinkage (dash) of Compositional data 
+Version: 0.99.0
+Author: Kushal K. Dey <kkdey@uchicago.edu>
+Maintainer: Kushal K. Dey <kkdey@uchicago.edu>
+Description: Performs adaptive shrinkage of compositional counts data using Dirichlet adaptive shrinkage (dash). the package fits a mixture multinomial-dirichlet distribution with Dirichlet components of varying concentrations to adaptively shrink the composition probabilities. 
+Depends: R (>= 3.3.0)
+License: GPL-3
+URL: http://kkdey.github.io/
+LazyData: true
+Suggests: ashr
+RoxygenNote: 6.0.1
