@@ -44,6 +44,7 @@ for(n in 1:dim(xmat)[1]){
   for(k in 2:dim(alpha_mat)[1]){
     x <- xmat[n,]
     numero <- sum(x)*beta(sum(alpha_mat[k,]), sum(x))
+    lognumero <- log(sum(x)) - LaplacesDemon::ddirichlet(rep(1,2), alpha = c(sum(alpha_mat[k,]), sum(x)), log=TRUE)
     if(numero == 0){
       matrix_lik[n, k] <- 0
     }else{
@@ -55,7 +56,28 @@ for(n in 1:dim(xmat)[1]){
   matrix_lik[n,1] <- exp(logfac(n) - sum(sapply(x, function(y) return(logfac(y)))) + sum(x*log(alpha_mat[k,]/sum(alpha_mat[k,]))))
 }
 
-
+ddir <- function (x, alpha, log = FALSE)
+{
+  if (missing(x))
+    stop("x is a required argument.")
+  if (missing(alpha))
+    stop("alpha is a required argument.")
+  if (!is.matrix(x))
+    x <- rbind(x)
+  if (!is.matrix(alpha))
+    alpha <- matrix(alpha, nrow(x), length(alpha), byrow = TRUE)
+  if (any(rowSums(x) != 1))
+    x/rowSums(x)
+  if (any(x < 0))
+    stop("x must be non-negative.")
+  if (any(alpha <= 0))
+    stop("alpha must be positive.")
+  dens <- as.vector(lgamma(rowSums(alpha)) - rowSums(lgamma(alpha)) +
+                      rowSums((alpha - 1) * log(x)))
+  if (log == FALSE)
+    dens <- exp(dens)
+  return(dens)
+}
 
 out <- mixEM(matrix_lik, prior)
 

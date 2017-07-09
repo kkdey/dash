@@ -7,8 +7,8 @@
 dash(comp_data, concentration = NULL, mode = NULL, weight = list(center =
   10, null = 1, corner = 1), def_positions = list(center = Inf, null = 1,
   corner = 0.5), optmethod = c("mixEM", "w_mixEM", "mixIP"),
-  sample_weights = NULL, verbose = FALSE, fdr_bound = 50,
-  pi_init = NULL, control = list())
+  sample_weights = NULL, verbose = FALSE, fdr_bound = 50, bf = TRUE,
+  pi_init = NULL, control = list(), reportcov = FALSE)
 }
 \arguments{
 \item{comp_data, }{a n by m matrix where n represents the sample and m
@@ -45,6 +45,10 @@ Defaults to NULL, in which case the weight is same for each sample.}
 \item{fdr_bound}{The concentration bound used to detect false discoveries
 of deviations from the mode.}
 
+\item{bf}{A boolean (TRUE/FALSE) variable denoting whether log bayes factor
+(with respect to category with smallest representation) is used in
+optimization or the loglikelihood. Defaults to FALSE.}
+
 \item{pi_init}{An initial starting value for the mixture proportions. Defaults
 to same proportion for all categories.}
 
@@ -52,6 +56,10 @@ to same proportion for all categories.}
 default value is set to be control.default=list(K = 1, method=3,
  square=TRUE, step.min0=1, step.max0=1, mstep=4, kr=1,
  objfn.inc=1,tol=1.e-07, maxiter=5000, trace=FALSE).}
+
+\item{reportcov}{A boolean indicating whether the user wants to return
+the covariance and correlation structure of the posterior.
+Defaults to FALSE.}
 }
 \value{
 A list, including the following,
@@ -60,8 +68,8 @@ A list, including the following,
         \code{prior}: Prior strengths of Dirichlet components
         \code{posterior_weights}: Posterior weights of each sample on each category posterior component
         \code{posmean}: Posterior means from dash fit of each sample
-        \code{poscov}: Posterior covariance structure for each sample
-        \code{poscor}: Posterior correlation structure for each sample
+        \code{poscov}: Posterior covariance structure for each sample (if \code{reportcov} TRUE)
+        \code{poscor}: Posterior correlation structure for each sample (if \code{reportcov} TRUE)
         \code{center_prob_local}: Posterior probability on Inf concentration Dirichlet component
         \code{center_prob}: Posterior probability on Dirichlet components with concentration less than \code{fdr_bound}
         \code{corner_prob}: Posterior probability on Dirichlet components with concentration less than 1

@@ -12,7 +12,9 @@ xmat <- rbind(c(5, 0, 2, 0),
               c(2, 4, 1, 1))
 
 
-out <- dash(xmat, optmethod = "w_mixEM", verbose=TRUE)
+out <- dash(xmat, optmethod = "mixEM", verbose=TRUE, bf=TRUE)
+
+
 
 xmat2 <- t(apply(xmat, 1, function(x) return(x/sum(x))))
 
@@ -37,3 +39,5 @@ fdr_bound = 50
 sample_weights = NULL
 pi_init = NULL
 control = list()
+
+LaplacesDemon::ddirichlet(rep(1,2), alpha = c(sum(alpha_mat[k,]), sum(x)), log=TRUE)
