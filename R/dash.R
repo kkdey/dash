@@ -167,8 +167,8 @@ dash <- function(comp_data,
   matrix_log_lik <- matrix(0, dim(comp_data)[1], dim(conc_mat)[1])
 
   for(n in 1:dim(comp_data)[1]){
+    x <- comp_data[n,]
     for(k in 2:dim(conc_mat)[1]){
-      x <- comp_data[n,]
      # numero <- sum(x)*beta(sum(conc_mat[k,]), sum(x))
       lognumero <- log(sum(x)) - LaplacesDemon::ddirichlet(rep(1,2), alpha = c(sum(conc_mat[k,]), sum(x)), log=TRUE)
       if(lognumero == -Inf | lognumero == Inf ){
@@ -183,7 +183,7 @@ dash <- function(comp_data,
        # matrix_lik[n,k] <- numero/deno
       }
     }
-    matrix_log_lik[n,1] <- logfac(n) - sum(sapply(x, function(y) return(logfac(y)))) + sum(x*log((conc_mat[k,]+1e-04)/sum(conc_mat[k,]+1e-04)))
+    matrix_log_lik[n,1] <- logfac(sum(x)) - sum(sapply(x, function(y) return(logfac(y)))) + sum(x*log((conc_mat[1,]+1e-04)/sum(conc_mat[1,]+1e-04)))
   }
 
   if(!bf){

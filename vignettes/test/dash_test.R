@@ -14,6 +14,15 @@ xmat <- rbind(c(5, 0, 2, 0),
 
 out <- dash(xmat, optmethod = "mixEM", verbose=TRUE, bf=TRUE)
 
+x1 <- rbind(c(1,	0, 	0, 	0, 	0, 	0, 	2, 	0, 	0, 	0, 	1, 	0, 	0, 	1),
+            c(2,	0,	3,	5,	3,	0,	1,	0,	0,	4,	1,	4,	1,	1),
+            c(1,	5,	1,	0,	0,	5,	2,	5,	5,	1,	2,	1,	4,	0),
+            c(1,	0,	1,	0,	2,	0,	0,	0,	0,	0,	1,	0,	0,	3))
+
+xmat <- t(x1)
+ll <- dash(xmat, optmethod = "mixEM", bf=FALSE)
+
+
 
 
 xmat2 <- t(apply(xmat, 1, function(x) return(x/sum(x))))
