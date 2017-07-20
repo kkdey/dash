@@ -7,15 +7,34 @@ deng.meta_data <- Biobase::pData(Deng2014MouseESC)
 deng.gene_names <- rownames(deng.counts)
 
 
-comp_data <- t(deng.counts)
-system.time(out <- dash(comp_data = t(deng.counts),
+comp_data <- t(deng.counts)[1:4,]+1
+system.time(out <- dash(comp_data = comp_data,
             optmethod = "mixEM",
             mode = colMeans(comp_data),
             def_positions = list("center" = Inf, "null" = 1, "corner" = 1),
-            concentration = c(Inf, 100, 50, 20, 10, 5, 2, 1),
+            concentration = c(Inf, 100, 50, 20, 10, 5, 2),
             weight = list("center" = 100, "null" = 1, "corner" = 1),
             bf = TRUE,
             verbose=TRUE))
+
+
+
+
+x1 <- rep(1, 10000)
+x1[floor(seq(1, 10000, length.out = 5000))] <- 0
+x1[10] <- 100
+x2 <- rep(1, 10000)
+
+mat <- rbind(x1, x2)
+
+system.time(out <- dash(comp_data = mat,
+                        optmethod = "mixEM",
+                        mode = x2,
+                        def_positions = list("center" = Inf, "null" = 1, "corner" = 1),
+                        concentration = c(Inf, 100, 50, 20, 10, 5, 2, 1),
+                        weight = list("center" = 100, "null" = 1, "corner" = 1),
+                        bf = TRUE,
+                        verbose=TRUE))
 
 
 

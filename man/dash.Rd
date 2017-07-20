@@ -67,7 +67,8 @@ A list, including the following,
         \code{concentration}: The concentration scales of the Dirichlet compositions
         \code{prior}: Prior strengths of Dirichlet components
         \code{posterior_weights}: Posterior weights of each sample on each category posterior component
-        \code{posmean}: Posterior means from dash fit of each sample
+        \code{posmean}: Posterior means of compositional probability from dash fit of each sample
+        \code{datamean}: Original compositional probability of each sample
         \code{poscov}: Posterior covariance structure for each sample (if \code{reportcov} TRUE)
         \code{poscor}: Posterior correlation structure for each sample (if \code{reportcov} TRUE)
         \code{center_prob_local}: Posterior probability on Inf concentration Dirichlet component
