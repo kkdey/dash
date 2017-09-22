@@ -20,7 +20,9 @@ x1 <- rbind(c(1,	0, 	0, 	0, 	0, 	0, 	2, 	0, 	0, 	0, 	1, 	0, 	0, 	1),
             c(1,	0,	1,	0,	2,	0,	0,	0,	0,	0,	1,	0,	0,	3))
 
 xmat <- t(x1)
-ll <- dash(xmat, optmethod = "mixEM", bf=FALSE)
+ll <- dash(xmat, optmethod = "mixEM",
+           concentration = c(100, 40, 20, 1, 0.1),
+           bf=FALSE)
 
 
 
@@ -47,6 +49,8 @@ verbose = FALSE
 fdr_bound = 50
 sample_weights = NULL
 pi_init = NULL
-control = list()
+bf = TRUE
+squarem_control = list()
+dash_control = list()
 
 LaplacesDemon::ddirichlet(rep(1,2), alpha = c(sum(alpha_mat[k,]), sum(x)), log=TRUE)
