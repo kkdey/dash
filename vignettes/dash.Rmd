@@ -1,6 +1,6 @@
 ---
 title: "Dirichlet adaptive shrinkage (dash) for compositional data"
-author: "Kushal K Dey"
+author: "Kushal K Dey, Matthew Stephens"
 date: "7/19/2017"
 output:
   BiocStyle::html_document:

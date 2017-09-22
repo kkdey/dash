@@ -111,11 +111,17 @@ dash <- function(comp_data,
     cat("Checking inputs and processing the data \n")
   }
 
+  ############  Determine the mode of the Dirichlet distribution   ##################
+
   if(is.null(mode)){
     mode <- rep(1, dim(comp_data)[2])
   }else{
     mode <- mode/min(mode[mode!=0])
   }
+
+  ## weights for the samples - check if this vector has the same
+  ## length as the number of samples (number of rows of the compositional data),
+  ## unless it is NULL, in which case, all samples have equal weights.
 
   if(!is.null(sample_weights)){
     if(length(sample_weights) != dim(comp_data)[1]){
@@ -124,6 +130,7 @@ dash <- function(comp_data,
     }
   }
 
+  ## check if an initial mixture proportion pi has been provided by the user.
 
   if(!is.null(pi_init)){
     if(length(pi_init) != dim(comp_data)[2]){
@@ -132,6 +139,8 @@ dash <- function(comp_data,
     }
   }
 
+ ## if background mode or probability is provided, we check if the length of the
+ ## vector matches with number of samples
 
   if(!is.null(mode)){
     if(length(mode) != dim(comp_data)[2]){
@@ -158,7 +167,7 @@ dash <- function(comp_data,
   prior[match(c(def_positions$center, def_positions$null, def_positions$corner), concentration)] <- c(weight$center, weight$null, weight$corner)
 
 
-  #############  define the matrix likelihoods   ###########################
+  #############  define the matrix likelihoods under Dirichlet model  ###########################
 
   if(verbose){
     cat("Fitting the dash shrinkage \n")
@@ -177,10 +186,6 @@ dash <- function(comp_data,
         index1 <- which(x > 0)
         logdeno <- sum(log(x[index1]) -  sapply(1:length(index1), function(mm) return(LaplacesDemon::ddirichlet(rep(1,2), alpha = c(conc_mat[k, index1[mm]], x[index1[mm]]), log=TRUE))))
         matrix_log_lik[n,k] <- lognumero - logdeno
-       # tmp1 <- exp(log(x[index1]) -  sapply(1:length(index1), function(mm) return(LaplacesDemon::ddirichlet(rep(1,2), alpha = c(conc_mat[k, index1[mm]], x[index1[mm]]), log=TRUE))))
-      #  tmp2 <- x[index1] * beta(conc_mat[k, index1], x[index1])
-       # deno <- prod(x[index1] * beta(conc_mat[k, index1], x[index1]))
-       # matrix_lik[n,k] <- numero/deno
       }
     }
     matrix_log_lik[n,1] <- logfac(sum(x)) - sum(sapply(x, function(y) return(logfac(y)))) + sum(x*log((conc_mat[1,]+1e-04)/sum(conc_mat[1,]+1e-04)))
@@ -210,6 +215,10 @@ dash <- function(comp_data,
     cat("Preparing output from fitted model  \n")
   }
 
+  ##  generate output list ll and assigning different attributes to it
+  ##  we first add the estimated pi, the concentration parameters and the prior
+  ##  parameters
+
   ll <- list()
   ll$fitted_pi <- fit$pihat
   ll$concentration <- concentration
@@ -220,6 +229,7 @@ dash <- function(comp_data,
   pi_complete <- rep(1, dim(matrix_lik)[1]) %*% t(fit$pihat)
   matrix_lik_adj <- matrix_lik*pi_complete
   posterior_weights <- t(apply(matrix_lik_adj, 1, function(x) return(x/sum(x))))
+  colnames(posterior_weights) <- concentration
   ll$posterior_weights <- posterior_weights
 
   ########################    posterior means      ############################
@@ -238,7 +248,6 @@ dash <- function(comp_data,
   for(n in 1:dim(comp_data)[1]){
     posmean[n,] <- posmean_comp[n,,]%*%posterior_weights[n,]
   }
-
   ll$posmean <- posmean
   ll$datamean <- t(apply(comp_data, 1, function(x) return(x/sum(x))))
 
