@@ -5,7 +5,7 @@
 - Authors:    [Kushal K Dey](https://github.com/kkdey),         [Matthew Stephens](http://stephenslab.uchicago.edu/)
 
 
-## Introduction
+## Description
 
 We present here a R package for fitting an adaptive method to shrink compositional
 counts data. We assume the input to be compositional counts with samples along columns
@@ -15,27 +15,10 @@ a given background probability as mean and concentration parameter ranging from 
 high values to very low values (even less than 1). The mixture proportions of the 
 Dirichlet prior are estimated from the data.
 
-## Model Formulation
 
-We model these compositional counts vectors as follows 
+For model formulation and the model fitting algorithm along with a discussion on
+choices of parameters, please check out our [vignette](vignettes/dash.Rmd)
 
-$$ (c_{n1}, c_{n2}, \cdots, c_{nL}) \sim Mult \left ( c_{n+} : p_{n1}, p_{n2}, \cdots, p_{nL} \right )  $$
-
-where $c_{n+}$ is the total frequency of the different constituents of the compositional data observed for the $n$ th base. $p_{nl}$ here represents the compositional probabilities such that 
-
-$$ p_{nl}  >= 0 \hspace {1 cm} \sum_{l=1}^{L} p_{nl} = 1  $$
-
-The prior for the composition probabilties is given below.
-
-$$ \left ( p_{n1}, p_{n2}, \cdots, p_{nL} \right ) : = \sum_{k=1}^{K} \pi_{k} Dir \left (\alpha_{k} \mu_{k1}, \alpha_{k} \mu_{k2}, \cdots, \alpha_{k} \mu_{kL} \right )  \hspace {1 cm} \alpha_{k} > 0 \hspace{1 cm}  \sum_{l=1}^{L} \mu_{kl} = 1 $$
-
-We assume a prior of $\pi_{k}$ to be Dirichlet 
-
-$$ f(\pi) : = \prod_{k=1}^{K} {\pi_{k}}^{\lambda_{k}-1} $$
-
-Such a prior is similar to the **ash** prior introduced by Stephens (2016) for modeling False discovery rates in normal data, and we call it the **dash** prior.
-
-To see how we choose the model concentration values and details on the estimation of the mode, check our Vignette.
 
 ##  Example Applications of dash 
 
@@ -118,5 +101,14 @@ logomaker(out$posmean,color_profile = color_profile,
 ```
 
 <img src="vignettes/test/dash_app.png" alt="Structure Plot" height="700" width="1000">
+
+## Contact
+
+For any queries or questions or bugs, please open an issue in this Github page or write to Kushal K Dey at [kshldey@gmail.com](kshldey@gmail.com). 
+
+## Acknowledgements
+
+The authors would like to acknowledge Dongyue Xie and Alex White for helpful discussions.
+
 
 
