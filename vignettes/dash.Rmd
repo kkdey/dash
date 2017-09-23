@@ -244,3 +244,19 @@ We find that all the 500 samples are shrunk to the prior mean, as attested below
 length(which(out$center_prob_local > 0.99))/dim(mat2)[1]
 ```
 
+## Notes 
+
+Some notes on the Dirichlet adaptive shrinkage (dash) method are as follows.
+
+- Since Beta distribution is a 2-D version of Dirichlet distribution, hence **dash** can
+be used for compositional probability shrinkage even in cases with two categories, when the compositional probabilities follow a mixture of Beta distributions prior.
+
+- **dash** learns adaptively from the data, so it benefits to have more samples (in TFBS case, more positions/sites) to learn the parameters adaptively. However, when the number of sites is not so large, we prefer to keep the weights on the mixture components to be 1 - meaning that the prior mixture proportions $\pi_{k}$ is chosen to be uniform.
+
+- Sometimes instead of counts, the user would have an average total size of counts for each sample and a composition probability matrix. In such a case, we recommend multiplying the total count by the composition probability and rounding them off to counts and input the counts matrix thus generated into **dash**.
+
+
+- **dash** is an example application of the adaptive shrinkage (ash) or **ashr** package due to Matthew Stephens. For more details on **ash**, check the [paper](https://www.biorxiv.org/content/early/2016/01/29/038216) and [software](https://github.com/stephens999/ashr). Many other packages based on **ash** have been developed in the lab, you can check them out in the Stephens Lab Github page.
+
+
+
