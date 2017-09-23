@@ -221,3 +221,26 @@ system.time(out <- dash(comp_data = t(taxonomic_counts+1),
 plot(out$posterior_weights[,1], log(rowSums(taxonomic_counts+1)), pch=20, col="red",
      xlab = "posterior weights", ylab = "number of bird species in grid")
 ```
+
+### Application of dash on a sparse matrix
+
+We apply dash on a sparse matrix with small intensity of $0.3$, such that $30\%$ of the entries are filled with 1 and the others are filled with 0.This corresponds to a very weak data with most data entries being 1, and ideally under an uniform background, we expect to shrink the compositional probabilities to the prior. We validate that with an example below.
+
+```{r}
+mat <- Matrix::rsparsematrix(nrow = 500, ncol = 100, density = 0.3)
+mat2 <- as.matrix(mat)
+mat2[mat2 != 0] = 1
+m1 <- colMeans(as.matrix(mat2))
+system.time(out <- dash(comp_data = t(mat2),
+                        optmethod = "mixEM",
+                        mode = m1,
+                        bf = TRUE,
+                        verbose=TRUE))
+```
+
+We find that all the 500 samples are shrunk to the prior mean, as attested below. 
+
+```{r}
+length(which(out$center_prob_local > 0.99))/dim(mat2)[1]
+```
+
