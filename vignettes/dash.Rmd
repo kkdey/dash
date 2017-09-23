@@ -104,17 +104,24 @@ For $\alpha_{k} = Inf$, we use the Stirling formula (ref) with the assumption th
 
 We first provide an example application of **dash** in shrinking the base compositional probabilities in a Trasncription Factor Binding Site (TFBS) for a particular transcription factor. 
 
-```{r}
+```{r message=FALSE, warning = FALSE, eval=TRUE}
+devtools::install_github("kkdey/Logolas")
+```
+
+```{r message=FALSE, warning = FALSE, eval=TRUE}
 devtools::install_github("kkdey/dash")
+devtools::install_github("kkdey/ecostructure")
 ```
 
 
 ```{r echo=TRUE, eval=TRUE, message = FALSE, warning=FALSE}
-library(dash)
 library(Logolas)
 library(grid)
 library(gridBase)
 library(ecostructure)
+library(ggplot2)
+library(Biobase)
+library(dash)
 ```
 
 
@@ -145,7 +152,7 @@ out <- dash(xmat, optmethod = "mixEM", verbose=FALSE, bf=TRUE)
 
 We present the logo plot representations of the PWM matrix obtained by normalizing the sample PFM matrix and the one after applying dash. We use the R package **Logolas** to visually represent the logos. 
 
-```{r}
+```{r fig.width = 9, fig.height = 8}
 grid.newpage()
 layout.rows <- 1
 layout.cols <- 2
@@ -185,3 +192,32 @@ logomaker(out$posmean,color_profile = color_profile,
 
 ### Ecological Abundance application
 
+We look at bird taxonomic count data collected from across 38 Himalyan grid spots for 304 bird species. The data can be loaded from the R package **ecostructure**.
+
+```{r}
+data <- get(load(system.file("extdata", "HimalayanBirdsData.rda",
+                             package = "ecostructure")))
+taxonomic_counts <- t(exprs(data))
+m1 <- colMeans(taxonomic_counts)
+```
+
+We look at the number of bird species recorded per site.
+
+```{r}
+rowSums(taxonomic_counts)
+```
+
+We note that some sites have very low frequency of bird species. Also the number of observed species in most case is much smaller than the total number of possible species investigated (304). This calls for the application of shrinkage in compositional probabilities and motivates the use of dash.
+
+```{r}
+system.time(out <- dash(comp_data = t(taxonomic_counts+1),
+                        optmethod = "mixEM",
+                        mode = m1,
+                        bf = TRUE,
+                        verbose=TRUE))
+```
+
+```{r}
+plot(out$posterior_weights[,1], log(rowSums(taxonomic_counts+1)), pch=20, col="red",
+     xlab = "posterior weights", ylab = "number of bird species in grid")
+```
