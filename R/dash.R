@@ -77,8 +77,8 @@
 #'              c(50, 54, 58, 53),
 #'              c(1,1,1,3),
 #'              c(2, 4, 1, 1))
-#' out <- dash(xmat, optmethod = "mixEM", verbose=TRUE)
-#' out <- dash(xmat, optmethod = "w_mixEM", verbose=TRUE)
+#' out <- dash(mat, optmethod = "mixEM", verbose=TRUE)
+#' out <- dash(mat, optmethod = "w_mixEM", verbose=TRUE)
 #'
 #' @export
 #'
@@ -98,7 +98,7 @@ dash <- function(comp_data,
 
   comp_data <- t(comp_data)
 
-  dash_control.default <- list(add_NULL = TRUE, add_Inf = TRUE, add_corner = TRUE,
+  dash_control.default <- list(add_NULL = TRUE, add_Inf = TRUE, add_corner = FALSE,
                           corner_val = 0.005, null_weight = 1, Inf_weight = 1,
                           corner_weight = 1, fdr_bound = 50)
 
@@ -160,7 +160,7 @@ dash <- function(comp_data,
   concentration <- unique(concentration)
 
   if(is.null(concentration)){
-    concentration <- c(Inf, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.005)
+    concentration <- c(Inf, 100, 50, 20, 10, 5, 2, 1)
   }else{
     if (dash_control$add_NULL){
       concentration <- c(concentration, 1)
