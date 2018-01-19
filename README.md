@@ -2,7 +2,7 @@
 
 
 
-- Authors:    [Kushal K Dey](https://github.com/kkdey),         [Matthew Stephens](http://stephenslab.uchicago.edu/)
+- Authors:    [Kushal K Dey](https://github.com/kkdey),   [Dongyue Xie](https://github.com/DongyueXie),    [Matthew Stephens](http://stephenslab.uchicago.edu/)
 
 
 ## Description
@@ -105,10 +105,6 @@ logomaker(out$posmean,color_profile = color_profile,
 ## Contact
 
 For any queries or questions or bugs, please open an issue in this Github page or write to Kushal K Dey at [kshldey@gmail.com](kshldey@gmail.com). 
-
-## Acknowledgements
-
-The authors would like to acknowledge Dongyue Xie and Alex White for helpful discussions.
 
 
 
